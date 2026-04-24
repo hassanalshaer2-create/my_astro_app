@@ -10,14 +10,12 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
       - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
       - name: Build APK
         run: |
-          pip install --upgrade flet
+          pip install flet
           flet build apk --module-name main_android --yes --skip-flutter-doctor
       - name: Upload APK
         uses: actions/upload-artifact@v4
