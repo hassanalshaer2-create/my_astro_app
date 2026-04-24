@@ -8,11 +8,9 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10
+          python-version: '3.10'
       - name: Install Dependencies
-        run: |
-          pip install flet
-          pip install serious_python
+        run: pip install flet serious_python
       - name: Build APK
         run: flet build apk --module-name main_android
       - name: Upload APK
