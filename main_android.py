@@ -1,5 +1,7 @@
 # 1. المكتبات الأساسية للنظام وواجهة المستخدم
 import flet as ft
+import ephem
+# بدلاً من import swisseph
 import hashlib
 import os
 import platform
