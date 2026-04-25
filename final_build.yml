@@ -25,17 +25,17 @@ jobs:
 
       - name: Build APK
         run: |
-          # 1. حل مشكلة أمان Git (بناءً على مسار الخطأ السابق)
-          git config --global --add safe.directory /root/flutter/3.41.4
+          # حل مشكلة ملكية المجلد في GitHub Actions
+          git config --global --add safe.directory '*'
           
-          # 2. تثبيت أداة Flet للبناء
+          # تثبيت أدوات البناء
           pip install flet
           
-          # 3. إنشاء ملف المتطلبات (ضروري جداً ليعمل التطبيق بعد التثبيت)
+          # إنشاء ملف المتطلبات لضمان وجود مكتبة ephem داخل الهاتف
           echo "flet" > requirements.txt
           echo "ephem" >> requirements.txt
           
-          # 4. أمر البناء - سيقوم بدمج ephem تلقائياً داخل الـ APK
+          # البدء في عملية بناء الـ APK
           flet build apk --module-name main_android --yes --skip-flutter-doctor
 
       - name: Upload APK
