@@ -28,11 +28,10 @@ jobs:
           # 1. حل مشكلة ملكية المجلد في جيت
           git config --global --add safe.directory '*'
           
-          # 2. تثبيت أداة Flet
+          # 2. تثبيت flet
           pip install flet
           
-          # 3. إنشاء ملف المتطلبات (بدون flet لتجنب التعارض وبدون المكتبات التي تسبب أخطاء)
-          # ملاحظة: تم استخدام hijri-converter بدلاً من ummalqura لضمان النجاح
+          # 3. إنشاء ملف المتطلبات (سيتعرف عليه flet تلقائياً أثناء البناء)
           echo "skyfield" > requirements.txt
           echo "geopy" >> requirements.txt
           echo "hijri-converter" >> requirements.txt
@@ -40,8 +39,8 @@ jobs:
           echo "python-bidi" >> requirements.txt
           echo "python-docx" >> requirements.txt
           
-          # 4. بناء الـ APK مع توجيه صريح لملف المتطلبات
-          flet build apk --module-name main_android --yes --skip-flutter-doctor --requirements requirements.txt
+          # 4. بناء الـ APK (بدون خيار --requirements لتجنب الخطأ)
+          flet build apk --module-name main_android --yes --skip-flutter-doctor
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
