@@ -1,5 +1,6 @@
 name: Final Build
 on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,14 +14,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+
       - name: Build APK
         run: |
-          rm -f requirements.txt
+          git config --global --add safe.directory '*'
           pip install flet
-          pip install pyswisseph || pip install ephem
+          
+          # إنشاء ملف المتطلبات
+          echo "flet" > requirements.txt
+          echo "ephem" >> requirements.txt
+          echo "geopy" >> requirements.txt
+          echo "ummalqura" >> requirements.txt
+          echo "arabic-reshaper" >> requirements.txt
+          echo "python-bidi" >> requirements.txt
+          
+          # بناء التطبيق - لينكس في جيت هب سيتكفل ببناء ephem
           flet build apk --module-name main_android --yes --skip-flutter-doctor
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-final-apk
-          path: build/apk/*.apk
