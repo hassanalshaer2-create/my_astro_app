@@ -15,9 +15,8 @@ jobs:
           python-version: '3.10'
       - name: Build APK
         run: |
-          rm -f requirements.txt
           pip install flet pyswisseph
-          flet build apk --module-name main_android --yes --skip-flutter-doctor
+          flet build apk --module-name main_android --yes --skip-flutter-doctor --include-all-imports
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
