@@ -20,13 +20,20 @@ jobs:
           git config --global --add safe.directory '*'
           pip install flet
           
-          # إنشاء ملف المتطلبات
+          # إنشاء ملف المتطلبات بالمكتبات المتوافقة مع أندرويد
           echo "flet" > requirements.txt
-          echo "ephem" >> requirements.txt
+          echo "skyfield" >> requirements.txt
           echo "geopy" >> requirements.txt
           echo "ummalqura" >> requirements.txt
           echo "arabic-reshaper" >> requirements.txt
           echo "python-bidi" >> requirements.txt
+          echo "python-docx" >> requirements.txt
           
-          # بناء التطبيق - لينكس في جيت هب سيتكفل ببناء ephem
+          # بناء التطبيق
           flet build apk --module-name main_android --yes --skip-flutter-doctor
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-final-apk
+          path: build/apk/*.apk
