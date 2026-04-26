@@ -20,14 +20,19 @@ jobs:
           git config --global --add safe.directory '*'
           pip install flet
           
-          # إعداد المكتبات المتاحة للسيرفر لضمان نجاح التحزيم
+          # إنشاء ملف المتطلبات بإصدارات موجودة فعلياً في السيرفر
           echo "skyfield==1.42" > requirements.txt
-          echo "jplephem==2.15" >> requirements.txt
-          echo "sgp4==2.20" >> requirements.txt
+          echo "jplephem>=2.17" >> requirements.txt
+          echo "sgp4>=2.20" >> requirements.txt
           echo "arabic-reshaper" >> requirements.txt
           echo "python-bidi" >> requirements.txt
+          echo "geopy" >> requirements.txt
+          echo "hijri-converter" >> requirements.txt
+          echo "python-docx" >> requirements.txt
           
+          # بناء التطبيق
           flet build apk --module-name almequate_android --yes --skip-flutter-doctor
+
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
