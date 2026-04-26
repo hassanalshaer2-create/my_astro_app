@@ -6,3 +6,6 @@ arabic-reshaper
 python-bidi
 python-docx
 skyfield
+certifi
+requests
+kivy
