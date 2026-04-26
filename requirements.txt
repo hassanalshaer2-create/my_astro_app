@@ -5,3 +5,4 @@ hijri-converter
 arabic-reshaper
 python-bidi
 python-docx
+skyfield
