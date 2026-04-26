@@ -25,7 +25,7 @@ jobs:
           git config --global --add safe.directory '*'
           pip install flet
           
-          # إجبار الأداة على استخدام إصدارات مستقرة وخفيفة للأندرويد
+          # إعداد المكتبات المضمونة والمتاحة في سيرفرات البناء
           echo "skyfield==1.42" > requirements.txt
           echo "jplephem==2.15" >> requirements.txt
           echo "sgp4==2.20" >> requirements.txt
@@ -35,11 +35,11 @@ jobs:
           echo "python-bidi" >> requirements.txt
           echo "python-docx" >> requirements.txt
           
-          # أمر البناء المعتمد على ملفك الموجود الآن في المجلد الرئيسي
+          # أمر البناء الموجه لملف البايثون في المجلد الرئيسي
           flet build apk --module-name almequate_android --yes --skip-flutter-doctor
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: my-final-apk
+          name: almequate-ultimate-apk
           path: build/apk/*.apk
