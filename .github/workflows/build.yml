@@ -6,41 +6,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '17'
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: subosito/flutter-action@v2
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
       - name: Build APK
         run: |
-          # 1. حل مشكلة ملكية المجلد في جيت
           git config --global --add safe.directory '*'
-          
-          # 2. تثبيت flet
           pip install flet
           
-          # 3. إنشاء ملف المتطلبات (سيتعرف عليه flet تلقائياً أثناء البناء)
-          echo "skyfield" > requirements.txt
+          # إنشاء المتطلبات
+          echo "flet" > requirements.txt
+          echo "skyfield" >> requirements.txt
           echo "geopy" >> requirements.txt
           echo "hijri-converter" >> requirements.txt
           echo "arabic-reshaper" >> requirements.txt
           echo "python-bidi" >> requirements.txt
           echo "python-docx" >> requirements.txt
           
-          # 4. بناء الـ APK (بدون خيار --requirements لتجنب الخطأ)
-          flet build apk --module-name main_android --yes --skip-flutter-doctor
+          # تعديل هام: --module-name يجب أن يكون almequate_android
+          flet build apk --module-name almequate_android --yes --skip-flutter-doctor
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
