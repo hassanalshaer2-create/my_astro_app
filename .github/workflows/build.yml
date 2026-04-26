@@ -15,23 +15,22 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Build APK
+       - name: Build APK
         run: |
           git config --global --add safe.directory '*'
           pip install flet
           
-          # إنشاء ملف المتطلبات بإصدارات موجودة فعلياً في السيرفر
+          # استراتيجية التثبيت النظيف: نترك النظام يختار النسخ التي تنجح في التحزيم تلقائياً
+          # حذفنا تحديد الإصدارات اليدوي لـ sgp4 و jplephem لمنع التعارض
           echo "skyfield==1.42" > requirements.txt
-          echo "jplephem>=2.17" >> requirements.txt
-          echo "sgp4>=2.20" >> requirements.txt
           echo "arabic-reshaper" >> requirements.txt
           echo "python-bidi" >> requirements.txt
           echo "geopy" >> requirements.txt
           echo "hijri-converter" >> requirements.txt
-          echo "python-docx" >> requirements.txt
           
-          # بناء التطبيق
+          # أمر البناء المحدث مع تخطي الفحوصات المسببة للفشل
           flet build apk --module-name almequate_android --yes --skip-flutter-doctor
+
 
 
       - name: Upload APK
