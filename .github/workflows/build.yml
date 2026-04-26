@@ -20,18 +20,18 @@ jobs:
           git config --global --add safe.directory '*'
           pip install flet
           
-          # إنشاء المتطلبات
-          echo "flet" > requirements.txt
-          echo "skyfield" >> requirements.txt
+          # إنشاء ملف متطلبات نظيف وبإصدارات متوافقة مع أندرويد
+          # تم حذف flet من هنا لأن الأداة تثبته تلقائياً وتكراره يسبب فشل البناء
+          echo "skyfield==1.46" > requirements.txt
           echo "geopy" >> requirements.txt
           echo "hijri-converter" >> requirements.txt
           echo "arabic-reshaper" >> requirements.txt
           echo "python-bidi" >> requirements.txt
           echo "python-docx" >> requirements.txt
           
-          # تعديل هام: --module-name يجب أن يكون almequate_android
+          # بناء التطبيق مع تحديد اسم الملف الصحيح
           flet build apk --module-name almequate_android --yes --skip-flutter-doctor
-
+          
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
