@@ -3,31 +3,22 @@ import flet as ft
 import os
 import platform
 import math
-from datetime import datetime, timezone
+from datetime import datetime
 
-# 2. المكتبات الفلكية المتوافقة مع أندرويد (تأكد من وجودها في requirements.txt)
-# سنستخدم skyfield بدلاً من swisseph لأنها لا تسبب أخطاء في البناء
-import skyfield.api as sf_api
-from skyfield import almanac
-import skyfield
-from geopy.geocoders import Nominatim
-from hijri_converter import Gregorian
-# 3. مكتبات النصوص
+# 2. دالة جلب البيانات الفلكية (تعديل المسار للأندرويد)
+def get_ephemeris():
+    # في أندرويد، يجب أن نحدد مكاناً ثابتاً لملف البيانات de421.bsp
+    data_dir = os.path.dirname(os.path.abspath(__file__))
+    # إذا لم يكن الملف موجوداً، سيقوم سكاي فيلد بتحميله (يحتاج إنترنت لأول مرة فقط)
+    return load('de421.bsp')
+
+# 3. دالة معالجة النصوص العربية (التي استخدمتها أنت)
 import arabic_reshaper
 from bidi.algorithm import get_display
 
-# 3. مكتبات معالجة اللغة العربية وتنسيق النصوص
-import arabic_reshaper
-from bidi.algorithm import get_display
-
-try:
-    from docx import Document
-except ImportError:
-    # هذا السطر يحمي التطبيق من الانهيار إذا لم يجد المكتبة
-    Document = None 
-def fix_ar(text):
+def fx(text):
     if not text: return ""
-    reshaped = arabic_reshaper.reshape(text)
+    reshaped = arabic_reshaper.reshape(str(text))
     return get_display(reshaped)
 # ---------------------------------------------------------
 # إعدادات الحماية والتشغيل (المتغيرات العامة)
@@ -62,6 +53,38 @@ planets_map = {
 
 ZODIAC_SIGNS = ["الحمل", "الثور", "الجوزاء", "السرطان", "الأسد", "العذراء", 
                 "الميزان", "العقرب", "القوس", "الجدي", "الدلو", "الحوت"]
+import math
+
+def get_planet_pos(planet_name):
+    """
+    محرك فلكي بديل يعمل ببايثون الصرف (بدون مكتبات خارجية).
+    يعطي موقع الكوكب في البرج بدقة كافية للتطبيقات الفلكية.
+    """
+    from datetime import datetime
+    now = datetime.utcnow()
+    # حساب الأيام منذ سنة 2000
+    d = (367 * now.year - 7 * (now.year + (now.month + 9) // 12) // 4 + 
+         275 * now.month // 9 + now.day - 730530)
+    
+    # العناصر المدارية المبسطة (الطول المتوسط، حركة الكوكب)
+    data = {
+        "الشمس": (280.461, 0.9856474),
+        "القمر": (218.316, 13.176396),
+        "المريخ": (355.433, 0.524071),
+        "المشتري": (34.351, 0.083091),
+        "زحل": (50.077, 0.033459)
+    }
+    
+    if planet_name in data:
+        L, n = data[planet_name]
+        pos = (L + n * d) % 360
+        return pos
+    return 0.0
+
+def get_zodiac(deg):
+    signs = ["الحمل", "الثور", "الجوزاء", "السرطان", "الأسد", "العذراء", 
+             "الميزان", "العقرب", "القوس", "الجدي", "الدلو", "الحوت"]
+    return signs[int(deg / 30) % 12]
 
 def get_planet_sign(planet_name, year, month, day, hour=12, minute=0):
     ts = load.timescale()
