@@ -1,5 +1,5 @@
 flet
-skyfield
+math
 geopy
 hijri-converter
 arabic-reshaper
