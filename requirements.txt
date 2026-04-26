@@ -1,2 +1,7 @@
 flet
-ephem
+skyfield
+geopy
+hijri-converter
+arabic-reshaper
+python-bidi
+python-docx
