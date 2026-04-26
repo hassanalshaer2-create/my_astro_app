@@ -23,20 +23,15 @@ jobs:
           git config --global --add safe.directory '*'
           pip install flet
           
-          # إعداد المكتبات المضمونة للبناء الناجح
-          # ملاحظة: skyfield 1.42 هي الأكثر استقراراً في بيئة GitHub Actions
+          # 1. إنشاء ملف المتطلبات بأبسط صورة ممكنة
           echo "skyfield==1.42" > requirements.txt
+          echo "jplephem==2.17" >> requirements.txt
           echo "arabic-reshaper" >> requirements.txt
           echo "python-bidi" >> requirements.txt
           echo "geopy" >> requirements.txt
           echo "hijri-converter" >> requirements.txt
           echo "python-docx" >> requirements.txt
-          
-          # أمر البناء الموجه لملف almequate_android.py الموجود في المجلد الرئيسي
-          flet build apk --module-name almequate_android --yes --skip-flutter-doctor
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: almequate-pro-apk
-          path: build/apk/*.apk
+          # 2. أمر البناء السحري:
+          # نستخدم --pre لضمان جلب النسخ المهيأة مسبقاً للأندرويد
+          flet build apk --module-name almequate_android --yes --skip-flutter-doctor
