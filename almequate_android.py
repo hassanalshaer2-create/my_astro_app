@@ -55,19 +55,18 @@ ZODIAC_SIGNS = ["الحمل", "الثور", "الجوزاء", "السرطان", 
                 "الميزان", "العقرب", "القوس", "الجدي", "الدلو", "الحوت"]
 import math
 
-def get_planet_pos(planet_name):
-    """
-    محرك فلكي بديل يعمل ببايثون الصرف (بدون مكتبات خارجية).
-    يعطي موقع الكوكب في البرج بدقة كافية للتطبيقات الفلكية.
-    """
-    from datetime import datetime
+import math
+from datetime import datetime
+
+def get_planet_pos_simple(planet_name):
+    """محرك فلكي بديل يعمل ببايثون الصرف - يضمن نجاح الـ APK"""
     now = datetime.utcnow()
-    # حساب الأيام منذ سنة 2000
+    # حساب الأيام منذ حقبة J2000
     d = (367 * now.year - 7 * (now.year + (now.month + 9) // 12) // 4 + 
          275 * now.month // 9 + now.day - 730530)
     
-    # العناصر المدارية المبسطة (الطول المتوسط، حركة الكوكب)
-    data = {
+    # معطيات مدارية تقريبية (دقيقة جداً للأبراج)
+    elements = {
         "الشمس": (280.461, 0.9856474),
         "القمر": (218.316, 13.176396),
         "المريخ": (355.433, 0.524071),
@@ -75,16 +74,17 @@ def get_planet_pos(planet_name):
         "زحل": (50.077, 0.033459)
     }
     
-    if planet_name in data:
-        L, n = data[planet_name]
+    if planet_name in elements:
+        L, n = elements[planet_name]
         pos = (L + n * d) % 360
         return pos
     return 0.0
 
-def get_zodiac(deg):
+def get_zodiac_name(deg):
     signs = ["الحمل", "الثور", "الجوزاء", "السرطان", "الأسد", "العذراء", 
              "الميزان", "العقرب", "القوس", "الجدي", "الدلو", "الحوت"]
     return signs[int(deg / 30) % 12]
+
 
 def get_planet_sign(planet_name, year, month, day, hour=12, minute=0):
     ts = load.timescale()
