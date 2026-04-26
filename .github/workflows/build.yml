@@ -6,44 +6,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '17'
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: subosito/flutter-action@v2
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
       - name: Build APK
         run: |
-          # 1. حل مشكلة ملكية المجلد في بيئة GitHub
           git config --global --add safe.directory '*'
-          
-          # 2. تثبيت أداة Flet
           pip install flet
           
-          # 3. إنشاء ملف المتطلبات (requirements.txt) بإصدارات "خفيفة" لضمان نجاح التحزيم
-          # استخدمنا skyfield 1.39 لأنها لا تتطلب مكتبات معقدة تفشل في الأندرويد
-          echo "skyfield==1.39" > requirements.txt
+          # إعداد المكتبات المتاحة للسيرفر لضمان نجاح التحزيم
+          echo "skyfield==1.42" > requirements.txt
           echo "jplephem==2.15" >> requirements.txt
           echo "sgp4==2.20" >> requirements.txt
-          echo "geopy==2.3.0" >> requirements.txt
-          echo "hijri-converter==2.3.1" >> requirements.txt
-          echo "arabic-reshaper==3.0.0" >> requirements.txt
-          echo "python-bidi==0.4.2" >> requirements.txt
-          echo "python-docx==0.8.11" >> requirements.txt
+          echo "arabic-reshaper" >> requirements.txt
+          echo "python-bidi" >> requirements.txt
           
-          # 4. بناء الـ APK مع توجيه الصلاحيات وتحديد اسم الملف الأساسي
-          # --module-name يجب أن يكون almequate_android ليطابق ملفك
           flet build apk --module-name almequate_android --yes --skip-flutter-doctor
 
       - name: Upload APK
